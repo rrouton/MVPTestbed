@@ -1,5 +1,7 @@
 package com.rrouton.happybrain;
 
+import com.rrouton.happybrain.utils.NetworkUtils;
+
 public class MainPresenter implements MainContract.Presenter {
 
     private final MainContract.View mainView;
@@ -20,6 +22,7 @@ public class MainPresenter implements MainContract.Presenter {
     public void testButtonClicked() {
         if (!clicked) {
             mainView.setTestText("I done clicked it");
+            NetworkUtils.testHttpUrlConnection();
         } else {
             mainView.setTestText("I done UN-clicked it");
         }
