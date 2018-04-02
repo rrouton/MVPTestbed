@@ -29,6 +29,12 @@ public class MainFragment extends Fragment implements MainContract.View {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mainPresenter.start();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
