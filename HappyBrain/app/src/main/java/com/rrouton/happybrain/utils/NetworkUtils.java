@@ -4,6 +4,10 @@ import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +16,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -100,19 +106,29 @@ public class NetworkUtils {
         HttpURLConnection urlConnection = null;
 
         try {
-            url = new URL("https://api.flickr.com/services/rest/?method=flickr.photos.getPopular");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        try {
+            url = new URL("https://api.flickr.com/services/rest/?method=flickr.photos.getPopular&api_key=7" +
+                    "71121adec7d520d28cf0340574e93f9&user_id=66956608@N06&format=json&nojsoncallback=1");
             urlConnection = (HttpURLConnection) url.openConnection();
-
-
-
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            String test = readInputStream(in);
+            String jsonStr = readInputStream(in);
+
+            //Hand parse json
+            JSONObject jsonObj = new JSONObject(jsonStr);
+            JSONObject photos = jsonObj.getJSONObject("photos");
+            JSONArray photo = photos.getJSONArray("photo");
+            for(int i = 0; i < photo.length(); i++) {
+                JSONObject p = photo.getJSONObject(i);
+                int id = p.getInt("id");
+                String owner = p.getString("owner");
+                String secret = p.getString("secret");
+                String server = p.getString("server");
+                Log.d(TAG, "id=" + id + " owner=" + owner + " secret=" + secret + " server=" + server);
+            }
+
+            Log.d(TAG, jsonStr);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         } finally {
             urlConnection.disconnect();
