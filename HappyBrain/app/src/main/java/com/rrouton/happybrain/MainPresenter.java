@@ -1,10 +1,12 @@
 package com.rrouton.happybrain;
 
+import com.rrouton.happybrain.api.FlickrApi;
+
 public class MainPresenter implements MainContract.Presenter {
 
     private final MainContract.View mainView;
 
-    private boolean clicked = false;
+    private FlickrApi flickerApi;
 
     public MainPresenter(MainContract.View mainView) {
         this.mainView = mainView;
@@ -13,16 +15,7 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void start() {
-        mainView.setTestText("Waiting for you to click it");
-    }
-
-    @Override
-    public void testButtonClicked() {
-        if (!clicked) {
-            mainView.setTestText("I done clicked it");
-        } else {
-            mainView.setTestText("I done UN-clicked it");
-        }
-        clicked = !clicked;
+        flickerApi = new FlickrApi();
+        flickerApi.getPhotos(photos -> mainView.setPhotos(photos));
     }
 }
