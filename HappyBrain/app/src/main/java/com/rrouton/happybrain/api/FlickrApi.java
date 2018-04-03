@@ -26,14 +26,9 @@ public class FlickrApi {
     private static final String TAG = "HappyBrain/BaseApi";
 
     private FlickrService service;
-    private Listener listener;
 
     public interface Listener {
         void loadPhotos(List<Photo> photos);
-    }
-
-    public void setListener(Listener listener) {
-        this.listener = listener;
     }
 
     public FlickrApi() {
@@ -41,7 +36,7 @@ public class FlickrApi {
     }
 
     public void getPhotos(Listener listener) {
-        service.getRecentPhotos(10, 1).enqueue(new Callback<FlickrGetRecentPhotosResponse>() {
+        service.getRecentPhotos(100, 1).enqueue(new Callback<FlickrGetRecentPhotosResponse>() {
             @Override
             public void onResponse(Call<FlickrGetRecentPhotosResponse> call, Response<FlickrGetRecentPhotosResponse> response) {
                 Photos photos = response.body().getPhotos();

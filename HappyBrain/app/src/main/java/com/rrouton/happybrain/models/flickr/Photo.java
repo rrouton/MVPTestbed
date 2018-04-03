@@ -144,4 +144,8 @@ public class Photo {
         this.additionalProperties.put(name, value);
     }
 
+    public String getUrl() {
+        return "https://farm" + farm + ".staticflickr.com/" + server + "/" + id + "_" +  secret + ".jpg";
+    }
+
 }
