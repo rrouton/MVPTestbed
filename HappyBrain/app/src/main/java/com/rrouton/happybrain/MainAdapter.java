@@ -16,6 +16,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     private List<Photo> photoList = new ArrayList();
     private ViewGroup parent;
+    private int width;
+
+    public MainAdapter(int width) {
+        this.width = width;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout layout;
@@ -40,7 +45,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Picasso.with(parent.getContext()).load(photoList.get(position).getUrl())
+        Picasso.with(parent.getContext())
+                .load(photoList.get(position).getUrl())
+                .resize(width, 0)
                 .into(holder.imageView);
     }
 
