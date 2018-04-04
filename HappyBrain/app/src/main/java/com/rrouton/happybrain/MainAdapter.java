@@ -47,6 +47,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         Picasso.with(parent.getContext())
                 .load(photoList.get(position).getUrl())
+                .placeholder(R.color.LightSlateGray)
                 .resize(width, 0)
                 .into(holder.imageView);
     }
