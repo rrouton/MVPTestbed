@@ -8,10 +8,12 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.rrouton.happybrain.models.flickr.Photo;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainFragment extends Fragment implements MainContract.View {
 
@@ -45,16 +47,20 @@ public class MainFragment extends Fragment implements MainContract.View {
 
         View root = inflater.inflate(R.layout.main_fragment, container, false);
 
+        root.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                mainPresenter.getPhotos();
+                root.getViewTreeObserver().removeOnPreDrawListener(this);
+                return true;
+            }
+        });
+
         recyclerView = root.findViewById(R.id.photosRecyclerView);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-
-        //Make the image width match the width of the screen for now.
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        adapter = new MainAdapter(displayMetrics.widthPixels);
-
+        adapter = new MainAdapter();
         recyclerView.setAdapter(adapter);
         return root;
     }

@@ -15,12 +15,7 @@ import java.util.List;
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     private List<Photo> photoList = new ArrayList();
-    private ViewGroup parent;
-    private int width;
-
-    public MainAdapter(int width) {
-        this.width = width;
-    }
+    private ViewGroup recyclerView;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout layout;
@@ -34,8 +29,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     }
 
     @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
+    }
+
+    @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        this.parent = parent;
         ConstraintLayout layout = (ConstraintLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.photo_viewholder, null);
 
@@ -45,10 +45,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Picasso.with(parent.getContext())
+        Picasso.with(recyclerView.getContext())
                 .load(photoList.get(position).getUrl())
                 .placeholder(R.color.LightSlateGray)
-                .resize(width, 0)
+                .resize(recyclerView.getWidth(), 0)
                 .into(holder.imageView);
     }
 

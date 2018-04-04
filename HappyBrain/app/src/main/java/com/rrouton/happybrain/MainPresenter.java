@@ -16,6 +16,10 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void start() {
         flickerApi = new FlickrApi();
+    }
+
+    @Override
+    public void getPhotos() {
         flickerApi.getPhotos(photos -> mainView.setPhotos(photos));
     }
 }
