@@ -30,7 +30,7 @@ public class Photos {
     @JsonProperty("total")
     private Integer total;
     @JsonProperty("photo")
-    private List<Photo> photo = null;
+    private List<Photo> photoList = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -75,13 +75,13 @@ public class Photos {
     }
 
     @JsonProperty("photo")
-    public List<Photo> getPhoto() {
-        return photo;
+    public List<Photo> getPhotoList() {
+        return photoList;
     }
 
     @JsonProperty("photo")
     public void setPhoto(List<Photo> photo) {
-        this.photo = photo;
+        this.photoList = photo;
     }
 
     @JsonAnyGetter

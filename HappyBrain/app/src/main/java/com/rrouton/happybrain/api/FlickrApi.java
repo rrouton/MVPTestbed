@@ -1,22 +1,17 @@
 package com.rrouton.happybrain.api;
 
-import android.util.Log;
-
 import com.rrouton.happybrain.models.flickr.Photo;
-import com.rrouton.happybrain.models.flickr.Photos;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
+import io.reactivex.Observable;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class FlickrApi {
@@ -27,27 +22,14 @@ public class FlickrApi {
 
     private FlickrService service;
 
-    public interface Listener {
-        void loadPhotos(List<Photo> photos);
-    }
-
     public FlickrApi() {
         service = getService();
     }
 
-    public void getPhotos(Listener listener) {
-        service.getRecentPhotos(100, 1).enqueue(new Callback<FlickrGetRecentPhotosResponse>() {
-            @Override
-            public void onResponse(Call<FlickrGetRecentPhotosResponse> call, Response<FlickrGetRecentPhotosResponse> response) {
-                Photos photos = response.body().getPhotos();
-                listener.loadPhotos(photos.getPhoto());
-            }
-
-            @Override
-            public void onFailure(Call<FlickrGetRecentPhotosResponse> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+    public Observable<List<Photo>> getPhotos() {
+        return service.getRecentPhotos(100, 1)
+            .map(r -> r.getPhotos())
+            .map(photos -> photos.getPhotoList());
     }
 
     private FlickrService getService() {
@@ -58,6 +40,7 @@ public class FlickrApi {
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(getOkHttpClient())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
     }

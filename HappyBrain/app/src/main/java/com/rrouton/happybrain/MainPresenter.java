@@ -2,6 +2,9 @@ package com.rrouton.happybrain;
 
 import com.rrouton.happybrain.api.FlickrApi;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 public class MainPresenter implements MainContract.Presenter {
 
     private final MainContract.View mainView;
@@ -20,6 +23,9 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void getPhotos() {
-        flickerApi.getPhotos(photos -> mainView.setPhotos(photos));
+        flickerApi.getPhotos()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(photoList -> mainView.setPhotos(photoList));
     }
 }
