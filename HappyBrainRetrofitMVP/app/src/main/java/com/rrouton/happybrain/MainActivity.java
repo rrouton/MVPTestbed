@@ -10,7 +10,7 @@ import com.rrouton.happybrain.utils.ActivityUtils;
 
 public class MainActivity extends AppCompatActivity {
 
-    private MainPresenter mainPresenter;
+    private MainPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,15 +23,15 @@ public class MainActivity extends AppCompatActivity {
 
         //Setup MVP for main:
         //View
-        MainFragment mainFragment =
+        MainFragment fragment =
                 (MainFragment)getSupportFragmentManager().findFragmentById(R.id.content_main);
-        if (mainFragment == null) {
-            mainFragment = MainFragment.newInstance();
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mainFragment, R.id.content_main);
+        if (fragment == null) {
+            fragment = MainFragment.newInstance();
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), fragment, R.id.content_main);
         }
 
         //Presenter
-        mainPresenter = new MainPresenter(mainFragment);
+        presenter = new MainPresenter(fragment);
     }
 
     @Override

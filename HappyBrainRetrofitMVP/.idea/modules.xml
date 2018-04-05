@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/HappyBrainVanillaMVP.iml" filepath="$PROJECT_DIR$/HappyBrainVanillaMVP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HappyBrainRetrofitMVP.iml" filepath="$PROJECT_DIR$/HappyBrainRetrofitMVP.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
