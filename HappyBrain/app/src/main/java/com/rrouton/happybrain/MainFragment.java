@@ -2,9 +2,9 @@ package com.rrouton.happybrain;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +13,6 @@ import android.view.ViewTreeObserver;
 import com.rrouton.happybrain.models.flickr.Photo;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainFragment extends Fragment implements MainContract.View {
 
@@ -21,6 +20,7 @@ public class MainFragment extends Fragment implements MainContract.View {
     private RecyclerView recyclerView;
     private MainAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public MainFragment() {
         // Required empty public constructor
@@ -50,7 +50,7 @@ public class MainFragment extends Fragment implements MainContract.View {
         root.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
-                mainPresenter.getPhotos();
+                mainPresenter.loadPhotos();
                 root.getViewTreeObserver().removeOnPreDrawListener(this);
                 return true;
             }
@@ -62,6 +62,8 @@ public class MainFragment extends Fragment implements MainContract.View {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new MainAdapter();
         recyclerView.setAdapter(adapter);
+        swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(() -> mainPresenter.loadPhotos());
         return root;
     }
 
@@ -74,5 +76,6 @@ public class MainFragment extends Fragment implements MainContract.View {
     public void setPhotos(List<Photo> photos) {
         adapter.setPhotoList(photos);
         adapter.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

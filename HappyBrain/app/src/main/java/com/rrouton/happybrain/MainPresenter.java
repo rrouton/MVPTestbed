@@ -22,7 +22,7 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void getPhotos() {
+    public void loadPhotos() {
         flickerApi.getPhotos()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
